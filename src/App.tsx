@@ -180,7 +180,7 @@ function App() {
                 <br />
                 ※ブラウザ設定を変更して起動する場合ターミナルから{' '}
                 <code>
-                  open -a /Applications/Google Chrome.app --args --max-active-webgl-contexts=40
+                  open -a /Applications/Google Chrome.app --args --max-active-webgl-contexts=45
                 </code>{' '}
                 を実行してください。
               </p>
