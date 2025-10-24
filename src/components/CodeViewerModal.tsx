@@ -75,6 +75,10 @@ function CodeViewerModal({ project, onClose }: CodeViewerModalProps) {
         ])
         if (disposed) return
 
+        const base = import.meta.env.BASE_URL ?? '/'
+        const normalizedBase = base.endsWith('/') ? base : `${base}/`
+        const mediaPath = `${normalizedBase}scratch-blocks-media/`
+
         try {
           ScratchBlocks.ScratchMsgs?.setLocale?.('ja')
           if (ScratchBlocks.ScratchMsgs?.currentLocale_ !== 'ja') {
@@ -85,7 +89,7 @@ function CodeViewerModal({ project, onClose }: CodeViewerModalProps) {
         }
 
         const workspace = ScratchBlocks.inject(containerRef.current, {
-          media: '/scratch-blocks-media/',
+          media: mediaPath,
           readOnly: true,
           scrollbars: true,
           trashcan: false,

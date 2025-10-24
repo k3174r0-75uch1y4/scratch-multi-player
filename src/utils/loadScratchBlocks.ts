@@ -3,10 +3,21 @@ type ScratchBlocksInstance = any
 let scratchBlocksPromise: Promise<ScratchBlocksInstance> | null = null
 let localeApplied = false
 
+const resolveAssetUrl = (src: string): string => {
+  if (/^(?:[a-z]+:)?\/\//i.test(src)) {
+    return src
+  }
+  const base = import.meta.env.BASE_URL ?? '/'
+  const normalizedBase = base.endsWith('/') ? base : `${base}/`
+  const normalizedSrc = src.startsWith('/') ? src.slice(1) : src
+  return `${normalizedBase}${normalizedSrc}`
+}
+
 const loadScript = (src: string): Promise<void> =>
   new Promise((resolve, reject) => {
+    const resolvedSrc = resolveAssetUrl(src)
     const existing = document.querySelector<HTMLScriptElement>(
-      `script[data-scratch-blocks="${src}"]`,
+      `script[data-scratch-blocks="${resolvedSrc}"]`,
     )
     if (existing) {
       if (existing.dataset.loaded === 'true') {
@@ -19,10 +30,10 @@ const loadScript = (src: string): Promise<void> =>
     }
 
     const script = document.createElement('script')
-    script.src = src
+    script.src = resolvedSrc
     script.type = 'text/javascript'
     script.async = true
-    script.dataset.scratchBlocks = src
+    script.dataset.scratchBlocks = resolvedSrc
     script.addEventListener('load', () => {
       script.dataset.loaded = 'true'
       resolve()
